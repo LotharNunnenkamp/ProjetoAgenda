@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 
 public class AgendaContatos {
-    static String[][] contatos = new String[100][3];
+    static String[][] contatos = new String[100][6];
     static int indice = 0;
 
     private static void increaseIndex() {
@@ -107,10 +107,17 @@ public class AgendaContatos {
                 System.out.print("Digite o E-mail: ");
                 email = sc.nextLine();
             } while (!AgendaServices.validarEmail(email));
+            System.out.println("Digite um telefone adicional ou pressione enter: ");
+            String telefoneAdicional = sc.nextLine();
+            System.out.println("Digite o endereço ou pressione enter: ");
+            String endereco = sc.nextLine();
 
             contatos[indice][0] = nome;
             contatos[indice][1] = telefone;
             contatos[indice][2] = email;
+            contatos[indice][3] = telefoneAdicional;
+            contatos[indice][4] = endereco;
+            contatos[indice][5] = "false";
             increaseIndex();
             System.out.println("Contato adicionado com sucesso!");
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -133,10 +140,10 @@ public class AgendaContatos {
             for (String[] contato : contatos) {
                 if (AgendaServices.checarSeContatoExiste(contatos, telefone)) {
                     System.out.println("\n-----Informações-----");
-                    System.out.println("Nome: " + contato[0] + "\t|Telefone: " + contato[1] + "\t |E-mail: " + contato[2]);
+                    System.out.println("Nome: " + contato[0] + "\t|Telefone: " + contato[1] + "\t |E-mail: " + contato[2] + "\t |Telefone adicional: " + contato[3] + "\t |Endereço: " + contato[4]);
                     break;
                 } else {
-                    System.out.println("Contato nao encontrado!");
+                    System.out.println("Contato não encontrado!");
                     break;
                 }
             }
@@ -160,8 +167,12 @@ public class AgendaContatos {
                     String novoTelefone = sc.next();
                     System.out.print("Novo E-mail: ");
                     String novoEmail = sc.next();
+                    System.out.println("Novo Telefone adicional: ");
+                    String novoTelefoneAdicional = sc.next();
+                    System.out.println("Novo Endereço: ");
+                    String novoEndereco = sc.next();
                     System.out.printf("\nVocê está alterando os dados do contato para:" +
-                            "\nNome: %s\nTelefone: %s\nE-mail: %s\nDigite 1 para Confirmar e 2 para Cancelar: ", novoNome, novoTelefone, novoEmail);
+                            "\nNome: %s\nTelefone: %s\nE-mail: %s\nTelefone adicional: %s\nEndereço: %s\nDigite 1 para Confirmar e 2 para Cancelar: ", novoNome, novoTelefone, novoEmail, novoTelefoneAdicional, novoEndereco);
                     int confirmacao = sc.nextInt();
                     if (confirmacao == 2) {
                         System.out.println("\nOperacão Cancelada...\n");
@@ -170,6 +181,8 @@ public class AgendaContatos {
                     contatos[i][0] = novoNome;
                     contatos[i][1] = novoTelefone;
                     contatos[i][2] = novoEmail;
+                    contatos[i][3] = novoTelefoneAdicional;
+                    contatos[i][4] = novoEndereco;
                     System.out.println("Contato atualizado!");
                     contatoJaExiste = true;
                     break;
@@ -188,15 +201,17 @@ public class AgendaContatos {
             System.out.println("Digite o número de telefone do contato a ser removido: ");
             String telefone = sc.next();
             System.out.println("Tem certeza que deseja remover o contato abaixo?");
-            String nomeContato = "", telefoneContato = "", emailContato = "";
+            String nomeContato = "", telefoneContato = "", emailContato = "", telefoneAdicionalContato = "", enderecoContato = "";
             for (int i = 0; i < indice; i++) {
                 if (contatos[i][1].equals(telefone)) {
                     nomeContato = contatos[i][0];
                     telefoneContato = contatos[i][1];
                     emailContato = contatos[i][2];
+                    telefoneAdicionalContato = contatos[i][3];
+                    enderecoContato = contatos[i][4];
                 }
             }
-            System.out.printf("\nNome: %s\nTelefone: %s\nE-mail: %s", nomeContato, telefoneContato, emailContato);
+            System.out.printf("\nNome: %s\nTelefone: %s\nE-mail: %s\nTelefone adicional: %s\nEndereço: %s", nomeContato, telefoneContato, emailContato, telefoneAdicionalContato, enderecoContato);
             System.out.println("\nDigite 1 para Confirmar e 2 para Cancelar: ");
             int confirmacao = sc.nextInt();
             if (confirmacao == 2) {
@@ -209,7 +224,7 @@ public class AgendaContatos {
                     for (int j = i; j < indice - 1; j++) {
                         contatos[j] = contatos[j + 1];
                     }
-                    contatos[indice - 1] = new String[3];
+                    contatos[indice - 1] = new String[6];
                     decreaseIndex();
                     System.out.println("Contato removido com sucesso.");
                     return;
@@ -225,11 +240,11 @@ public class AgendaContatos {
     private static void listarTodosContatos() {
         System.out.println(">>>>>>> CONTATOS <<<<<<<");
 
-        System.out.printf("%-5s %-20s %-15s %-30s\n", "Id", "Nome", "Telefone", "E-mail");
+        System.out.printf("%-5s %-20s %-15s %-30s %-15s %-50s %-10s\n", "Id", "Nome", "Telefone", "E-mail", "Telefone adicional", "Endereço", "Favorito");
         System.out.println("---------------------------------------------------------------");
 
         for (int i = 0; i < indice; i++) {
-            System.out.printf("%-5d %-20s %-15s %-30s\n", i, contatos[i][0], contatos[i][1], contatos[i][2]);
+            System.out.printf("%-5d %-20s %-15s %-30s %-15s %-50s %-10s\n", i, contatos[i][0], contatos[i][1], contatos[i][2], contatos[i][3], contatos[i][4], contatos[i][5]);
         }
 
         System.out.println("---------------------------------------------------------------");
@@ -237,7 +252,7 @@ public class AgendaContatos {
 
     private static void agendaAdaptavel() {
         if (AgendaServices.listaCheia(contatos, indice)) {
-            String[][] novosContatos = new String[2 * indice][3];
+            String[][] novosContatos = new String[2 * indice][6];
             for (int i = 0; i < contatos.length; i++) {
                 for (int j = 0; j < contatos[i].length; j++) {
                     novosContatos[i][j] = contatos[i][j];
