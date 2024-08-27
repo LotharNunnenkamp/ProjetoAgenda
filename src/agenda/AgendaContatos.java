@@ -4,6 +4,7 @@ import models.Operacoes;
 import services.AgendaServices;
 
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -37,7 +38,8 @@ public class AgendaContatos {
             System.out.println("3 - Editar Contato");
             System.out.println("4 - Remover Contatos");
             System.out.println("5 - Listar Contatos");
-            System.out.println("6 - Sair\n");
+            System.out.println("6 - Favoritar Contato");
+            System.out.println("7 - Sair\n");
             System.out.print("Escolha uma opção: ");
 
             int opcao = 0;
@@ -76,6 +78,9 @@ public class AgendaContatos {
                     break;
                 case LISTAR:
                     listarTodosContatos();
+                    break;
+                case FAVORITAR:
+                    favoritarContato(contatos, sc);
                     break;
                 case SAIR:
                     System.out.println("Tem certeza que deseja sair do programa?\n1 - SIM\n2 - NÃO");
@@ -140,7 +145,7 @@ public class AgendaContatos {
             for (String[] contato : contatos) {
                 if (AgendaServices.checarSeContatoExiste(contatos, telefone)) {
                     System.out.println("\n-----Informações-----");
-                    System.out.println("Nome: " + contato[0] + "\t|Telefone: " + contato[1] + "\t |E-mail: " + contato[2] + "\t |Telefone adicional: " + contato[3] + "\t |Endereço: " + contato[4]);
+                    System.out.println("Nome: " + contato[0] + "\t|Telefone: " + contato[1] + "\t |E-mail: " + contato[2] + "\t |Telefone adicional: " + contato[3] + "\t |Endereço: " + contato[4] + "\t |Favorito: " + contato[5]);
                     break;
                 } else {
                     System.out.println("Contato não encontrado!");
@@ -248,6 +253,35 @@ public class AgendaContatos {
         }
 
         System.out.println("---------------------------------------------------------------");
+    }
+
+    private static void favoritarContato(String[][] contatos, Scanner sc) {
+        try {
+            System.out.println("Digite o telefone do contato: ");
+            String telefone = sc.next();
+
+            for (String[] contato : contatos) {
+                if (AgendaServices.checarSeContatoExiste(contatos, telefone)) {
+                    System.out.println("Deseja favoritar o seguinte contato?");
+                    System.out.println("Nome: " + contato[0] + "\t|Telefone: " + contato[1] + "\t |E-mail: " + contato[2] + "\t |Telefone adicional: " + contato[3] + "\t |Endereço: " + contato[4] + "\t |Favorito: " + contato[5]);
+                    System.out.println("Digite 1 para SIM e 2 para NÃO");
+                    String opcao = sc.next();
+                    if (!Objects.equals(opcao, "1")) {
+                        break;
+                    }
+                    System.out.println(opcao);
+                    System.out.println(contato[5]);
+                    contato[5] = "true";
+                    System.out.println("Contato favoritado com sucesso!");
+                    break;
+                } else {
+                    System.out.println("Contato não encontrado!");
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao detalhar contato: " + e.getMessage());
+        }
     }
 
     private static void agendaAdaptavel() {
