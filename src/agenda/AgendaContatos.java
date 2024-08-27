@@ -77,7 +77,7 @@ public class AgendaContatos {
                     removerContato(sc);
                     break;
                 case LISTAR:
-                    listarTodosContatos();
+                    listarTodosContatos(sc);
                     break;
                 case FAVORITAR:
                     favoritarContato(contatos, sc);
@@ -242,14 +242,26 @@ public class AgendaContatos {
     }
 
 
-    private static void listarTodosContatos() {
+    private static void listarTodosContatos(Scanner sc) {
+        System.out.println("Deseja listar apenas os contatos favoritados? Digite 1 para Sim ou 2 para Não");
+        String favoritos = sc.next();
+
         System.out.println(">>>>>>> CONTATOS <<<<<<<");
 
         System.out.printf("%-5s %-20s %-15s %-30s %-15s %-50s %-10s\n", "Id", "Nome", "Telefone", "E-mail", "Telefone adicional", "Endereço", "Favorito");
         System.out.println("---------------------------------------------------------------");
 
-        for (int i = 0; i < indice; i++) {
-            System.out.printf("%-5d %-20s %-15s %-30s %-15s %-50s %-10s\n", i, contatos[i][0], contatos[i][1], contatos[i][2], contatos[i][3], contatos[i][4], contatos[i][5]);
+        if (Objects.equals(favoritos, "1")) {
+            for (int i = 0; i < indice; i++) {
+                if (Objects.equals(contatos[i][5], "true")) {
+                    System.out.printf("%-5d %-20s %-15s %-30s %-15s %-50s %-10s\n", i, contatos[i][0], contatos[i][1], contatos[i][2], contatos[i][3], contatos[i][4], contatos[i][5]);
+                }
+
+            }
+        } else {
+            for (int i = 0; i < indice; i++) {
+                System.out.printf("%-5d %-20s %-15s %-30s %-15s %-50s %-10s\n", i, contatos[i][0], contatos[i][1], contatos[i][2], contatos[i][3], contatos[i][4], contatos[i][5]);
+            }
         }
 
         System.out.println("---------------------------------------------------------------");
@@ -269,8 +281,6 @@ public class AgendaContatos {
                     if (!Objects.equals(opcao, "1")) {
                         break;
                     }
-                    System.out.println(opcao);
-                    System.out.println(contato[5]);
                     contato[5] = "true";
                     System.out.println("Contato favoritado com sucesso!");
                     break;
